@@ -1,0 +1,59 @@
+{
+  "devices": [
+    {
+      "name": "tv",
+      "mac": "25:56:c6:a6:11:98",
+      "track": true
+    },
+    {
+      "name": "laptop",
+      "mac": "4f:a8:23:65:2e:d7"
+    },
+    {
+      "name": "tablet",
+      "mac": "e1:d2:d0:23:53:0d"
+    },
+    {
+      "name": "phone",
+      "mac": "a7:15:c6:0e:b5:19",
+      "track": true
+    },
+    {
+      "name": "printer",
+      "mac": "3d:95:9f:8c:1a:52"
+    },
+    {
+      "name": "router",
+      "mac": "54:e3:b4:91:be:31"
+    },
+    {
+      "name": "phone2",
+      "mac": "ed:84:ce:61:36:dd",
+      "track": true
+    },
+    {
+      "name": "wiznet-pico",
+      "mac": "c2:f1:cb:05:48:b6"
+    }
+  ],
+  "mqtt": {
+    "host": "192.168.0.5",
+    "port": 1883,
+    "username": "mqtt-user",
+    "password": "replace-with-your-mqtt-password",
+    "client_id": "home-events",
+    "keepalive": 300,
+    "topic": "/home-events"
+  },
+  "network": {
+    "ip": "192.168.0.211",
+    "gateway": "192.168.0.1",
+    "mask": "255.255.255.0",
+    "dns": "8.8.8.8",
+    "mac": "00:e0:4c:53:44:59"
+  },
+  "stats": {
+    "notify": false,
+    "interval": 60
+  }
+}
