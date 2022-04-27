@@ -27,7 +27,7 @@ In this project, we try to decouple the events and leave the action for systems 
 2. Copy libraries to `lib` folder on the device. These are tested and working: https://github.com/home-events/w5100s-circuit-python-libs
 3. Create your `config.json` in `src/` folder. See `config-sample.json` for an example.
 4. Copy `src/` folder to the root of your device.
-5. Type `http://<your-configured-ip-adress>` in your browser.
+5. Type `http://<your-configured-ip-address>` in your browser.
 
 
 ## Architecture

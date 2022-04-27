@@ -7,7 +7,7 @@ from adafruit_wiznet5k.adafruit_wiznet5k import WIZNET5K
 from config import Config
 from mapper import Mapper
 from notifier import MqttNotifier
-from packet_decoder import decode_packet
+from decoder import decode_packet
 from inference import *
 from sniffer import Sniffer
 from stats import PacketStats
@@ -100,7 +100,6 @@ while True:
     inference_engine.update(packet)
     now = time.time()
     if notifier and stats_config['notify'] and last_notify_time < now - stats_config['interval']:
-        print(f"last notify: {last_notify_time}, size: {len(stats.stats)}")
         notifier.notify('stats', json.dumps({"stats": stats.stats, "packet_types": stats.packet_types, "events": stats.tracking}))
         last_notify_time = time.time()
 
