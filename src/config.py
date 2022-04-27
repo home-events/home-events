@@ -31,3 +31,9 @@ class Config:
     def network_config(self):
         return self.__config.get("network",
                                  {"ip": "192.168.0.211", "mask": "255.255.255.0", "gateway": "192.168.0.1", "dns": "8.8.8.8", "mac": "c2:f1:cb:05:48:b6"})
+
+    def notify_enabled(self):
+        return self.__config.get("notify", {"enabled": False})['enabled']
+
+    def web_server_enabled(self):
+        return self.__config.get("web", {"enabled": False})['enabled']

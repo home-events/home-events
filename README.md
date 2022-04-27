@@ -23,9 +23,11 @@ In this project, we try to decouple the events and leave the action for systems 
 
 ## Quickstart
 
-1. Install CircuitPython on your device, follow https://github.com/Wiznet/RP2040-HAT-CircuitPython
-2. Copy libraries to the device. These are tested and working: https://github.com/home-events/w5100s-circuit-python-libs
-3. Create your `config.json` in src/. See `config-sample.json` for an example.
+1. Install CircuitPython on your device: Download the [latest stable release](https://circuitpython.org/board/raspberry_pi_pico/), disconnect PICO, hold the BOOT button down, connect and copy the UF2 file to the PICO and release the BOOT button.
+2. Copy libraries to `lib` folder on the device. These are tested and working: https://github.com/home-events/w5100s-circuit-python-libs
+3. Create your `config.json` in `src/` folder. See `config-sample.json` for an example.
+4. Copy `src/` folder to the root of your device.
+5. Type `http://<your-configured-ip-adress>` in your browser.
 
 
 ## Architecture

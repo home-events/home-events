@@ -36,6 +36,12 @@
       "mac": "c2:f1:cb:05:48:b6"
     }
   ],
+  "notify": {
+    "enabled": true
+  },
+  "web": {
+    "enabled": false
+  },
   "mqtt": {
     "host": "192.168.0.5",
     "port": 1883,

@@ -1,1 +1,4 @@
-src/config.json
+config.json
+
+.DS_Store
+.idea/

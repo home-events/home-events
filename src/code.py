@@ -1,3 +1,4 @@
+import json
 import board
 import busio
 import digitalio
@@ -11,7 +12,6 @@ from inference import *
 from sniffer import Sniffer
 from stats import PacketStats
 from web_server import web_server_instance
-import gc
 
 ##SPI0
 SPI0_SCK = board.GP18
@@ -57,26 +57,39 @@ print("IP:", eth.pretty_ip(eth.ip_address))
 mapper = Mapper(config.mac_address_to_devices())
 sniffer = Sniffer(eth, debug=False)
 
-mqtt_config = config.mqtt_config()
-notifier = MqttNotifier(eth=eth, host=mqtt_config['host'], topic=mqtt_config['topic'], mqtt_user=mqtt_config['username'], mqtt_password=mqtt_config['password'])
+notifier = None
+if config.notify_enabled():
+    mqtt_config = config.mqtt_config()
+    notifier = MqttNotifier(eth=eth, host=mqtt_config['host'], topic=mqtt_config['topic'], mqtt_user=mqtt_config['username'], mqtt_password=mqtt_config['password'])
 
-stats_notify_callback = None
+
 stats_config = config.stats_config()
-if stats_config['notify']:
-    stats_notify_callback = notifier.notify
+if stats_config['notify'] and notifier:
     print(f"Stats will be sent to MQTT, config: {stats_config}")
 
-stats = PacketStats(mapper, notify_callback=stats_notify_callback, notify_every_seconds=stats_config['interval'])
+stats = PacketStats(mapper, notify_every_seconds=stats_config['interval'])
 
-inference_engine = SimpleRuleEngine(devices_to_track=config.tracking_devices(), notify_callback=notifier.notify, track_callback=stats.track)
+rules_notify_callback = None
+if notifier:
+    rules_notify_callback = notifier.notify
+
+inference_engine = SimpleRuleEngine(devices_to_track=config.tracking_devices(), notify_callback=rules_notify_callback, track_callback=stats.track)
+
+web_server = None
+if config.web_server_enabled():
+    web_server = web_server_instance
 
 sniffer.start()
-web_server_instance.begin(eth, stats)
-notifier.start()
+if web_server:
+    web_server.begin(eth, stats)
+
+if notifier:
+    notifier.start()
+
+last_notify_time = time.time()
 
 packet_idx = 0
 while True:
-    web_server_instance.loop()
     size, buf = sniffer.next_packet()
     if size < 0:
         continue
@@ -85,5 +98,12 @@ while True:
     mapper.map_packet(packet, map_unknown_to='')
     stats.update(packet)
     inference_engine.update(packet)
+    now = time.time()
+    if notifier and stats_config['notify'] and last_notify_time < now - stats_config['interval']:
+        print(f"last notify: {last_notify_time}, size: {len(stats.stats)}")
+        notifier.notify('stats', json.dumps({"stats": stats.stats, "packet_types": stats.packet_types, "events": stats.tracking}))
+        last_notify_time = time.time()
+
+    if web_server:
+        web_server.loop()
     packet_idx += 1
-    gc.collect()
